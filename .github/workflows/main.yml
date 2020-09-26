@@ -57,7 +57,7 @@ jobs:
       
       - name: SCP EC2 Copy app file
         env:
-          PRIVATE_KEY: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          PRIVATE_KEY: ${{ secrets.AWS_APPSRV1_PRIVATE_KEY }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           echo private_key
