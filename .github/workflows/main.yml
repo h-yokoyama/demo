@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: AWS Code Deploy
+name: EC2 Deploy
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -9,6 +9,18 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+
+env:
+  ENVIRONMENT: prod
+  EC2_USER: 'ec2-user'
+  EC2_HOST: http://3.115.214.155/
+  SRC_PATH: 'target/*.war'
+  DEST_DIR: '/usr/share/tomcat/webapps'
+
+  APP_NAME: 'demo'
+  JAVA_VERSION: '1.8'
+  JAVA_OPTS: '-Xms1024M -Xmx1024M'
+  RUN_ARGS: '--spring.profiles.active=prod'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: ${{ env.JAVA_VERSION }}
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -32,10 +44,8 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - run: pwd
-      - run: ls -l
-      - run: mkdir staging && cp target/*.war staging
+      - run: mkdir staging && cp ${{ env.SRC_PATH }} ${{ env.ENVIRONMENT }}
       - uses: actions/upload-artifact@v2
         with:
-          name: Package
-          path: staging
+          name: ${{ env.APP_NAME }}
+          path: ${{ env.ENVIRONMENT }}
