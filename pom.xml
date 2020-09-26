@@ -17,6 +17,7 @@
 
 	<properties>
 		<java.version>8</java.version>
+		<pachaging>war</pachaging>
 	</properties>
 
 	<dependencies>
