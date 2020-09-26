@@ -13,7 +13,7 @@ on:
 env:
   ENVIRONMENT: prod
   EC2_USER: 'ec2-user'
-  EC2_HOST: http://3.115.214.155/
+  EC2_HOST: 3.115.214.155
   SRC_PATH: 'target/*.war'
   DEST_DIR: '/usr/share/tomcat/webapps'
 
