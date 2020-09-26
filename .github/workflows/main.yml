@@ -70,10 +70,8 @@ jobs:
           username: ${{ env.EC2_USER }}
           host: ${{ env.EC2_HOST }}
           script: |
-            fi
             echo "===== application (re)start ====="
-            sudo systemctl daemon-reload
-            if sudo systemctl status ${{ env.APP_NAME }} 2>&1 | grep "Active: active (running)" ; then
+            if sudo systemctl status tomcat 2>&1 | grep "Active: active (running)" ; then
               echo "${{ env.APP_NAME }} app restart!!"
               sudo systemctl restart ${{ env.APP_NAME }}
             else
