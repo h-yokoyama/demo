@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: EC2 Deploy
+name: Deploy ec2
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -55,7 +55,7 @@ jobs:
           name: ${{ env.APP_NAME }}
           path: ${{ env.ENVIRONMENT }}
       
-      - name: SCP EC2 Copy app file
+      - name: Scp ec2 copy war file
         env:
           PRIVATE_KEY: ${{ secrets.AWS_APPSRV1_PRIVATE_KEY }}
         run: |
@@ -63,7 +63,7 @@ jobs:
           scp -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war
           ssh -t -o StrictHostKeyChecking=no -i private_key ${{ env.EC2_USER }}@${{ env.EC2_HOST}} "sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }}"
 
-      - name: SSH EC2 Setup and Deploy
+      - name: Ssh ec2 reestart tomcat
         uses: appleboy/ssh-action@master
         with:
           key: ${{ secrets.AWS_APPSRV1_PRIVATE_KEY }}
