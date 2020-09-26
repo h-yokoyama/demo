@@ -56,7 +56,7 @@ jobs:
           path: ${{ env.ENVIRONMENT }}
 
       - name: SCP EC2 Copy app file
-      - run: |
+        run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -t -o StrictHostKeyChecking=no -i private_key ${EC2_USER}@${EC2_HOST} "sudo mkdir -p $DEST_DIR/$APP_NAME && sudo chmod -R 777 $DEST_DIR/$APP_NAME"
           scp -i private_key ${SRC_PATH} ${EC2_USER}@${EC2_HOST}:${DEST_DIR}/${APP_NAME}/${APP_NAME}.war   
