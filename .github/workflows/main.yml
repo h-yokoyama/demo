@@ -73,8 +73,8 @@ jobs:
             echo "===== application (re)start ====="
             if sudo systemctl status tomcat 2>&1 | grep "Active: active (running)" ; then
               echo "${{ env.APP_NAME }} app restart!!"
-              sudo systemctl restart ${{ env.APP_NAME }}
+              sudo systemctl restart tomcat
             else
               echo "${{ env.APP_NAME }} app start!!"
-              sudo systemctl start ${{ env.APP_NAME }}
+              sudo systemctl start tomcat
             fi
