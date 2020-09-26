@@ -42,9 +42,11 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - run: mkdir staging && cp ${{ env.SRC_PATH }} ${{ env.ENVIRONMENT 
+
       - name: upload artifacts
       - uses: actions/upload-artifact@v2
         with:
