@@ -44,9 +44,13 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: install can-npm-publish and dependencies
         run: |
-          cd ./web && ls -ltr
+          cd ./web
           npm install can-npm-publish
           npm ci
+      - name: build vue modules
+        run: |
+         npm run build
+         ls -ltr dist
 
       - name: Build with Maven
         run: mvn -B package -Dmaven.test.skip=true --file pom.xml
@@ -66,7 +70,8 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war
-          ssh -t -o StrictHostKeyChecking=no -i private_key ${{ env.EC2_USER }}@${{ env.EC2_HOST}} "sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }}"
+          scp -o StrictHostKeyChecking=no -i private_key ./web/dist/* ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/index/
+          ssh -t -o StrictHostKeyChecking=no -i private_key ${{ env.EC2_USER }}@${{ env.EC2_HOST}} "sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }} && sudo mv /home/${{ env.EC2_USER }}/index/* /usr/share/nginx/html/demo/"
 
       - name: Ssh ec2 reestart tomcat
         uses: appleboy/ssh-action@master
