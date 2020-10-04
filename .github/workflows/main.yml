@@ -66,9 +66,10 @@ jobs:
           PRIVATE_KEY: ${{ secrets.AWS_APPSRV1_PRIVATE_KEY }}
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          echo "===== scp war ====="
           scp -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war
-          scp -o StrictHostKeyChecking=no -i private_key -rf ./web/dist/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/index
-          ssh -t -o StrictHostKeyChecking=no -i private_key ${{ env.EC2_USER }}@${{ env.EC2_HOST}} "sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }} && sudo cp -rfp /home/${{ env.EC2_USER }}/index/dist/* /usr/share/nginx/html/demo/"
+          echo "===== scp vue module ====="
+          scp -o StrictHostKeyChecking=no -i private_key -r ./web/dist/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/index
 
       - name: Ssh ec2 reestart tomcat
         uses: appleboy/ssh-action@master
@@ -77,6 +78,10 @@ jobs:
           username: ${{ env.EC2_USER }}
           host: ${{ env.EC2_HOST }}
           script: |
+            echo "===== deploy war ====="
+            sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }}
+            echo "===== deploy vue module ====="
+            sudo cp -rf /home/${{ env.EC2_USER }}/index/dist/* /usr/share/nginx/html/demo/
             echo "===== application (re)start ====="
             if sudo systemctl status tomcat 2>&1 | grep "Active: active (running)" ; then
               echo "${{ env.APP_NAME }} app restart!!"
