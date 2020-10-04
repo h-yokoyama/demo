@@ -37,6 +37,16 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
       
+      - name: setup Node 
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+          registry-url: 'https://registry.npmjs.org'
+      - name: install can-npm-publish and dependencies
+        run: |
+          npm install can-npm-publish
+          npm ci
+
       - name: Build with Maven
         run: mvn -B package -Dmaven.test.skip=true --file pom.xml
       
