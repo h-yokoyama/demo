@@ -67,8 +67,8 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war
-          scp -o StrictHostKeyChecking=no -i private_key -rf ./web/dist/* ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/index/
-          ssh -t -o StrictHostKeyChecking=no -i private_key ${{ env.EC2_USER }}@${{ env.EC2_HOST}} "sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }} && sudo cp -rfp /home/${{ env.EC2_USER }}/index/* /usr/share/nginx/html/demo/"
+          scp -o StrictHostKeyChecking=no -i private_key -rf ./web/dist/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/index
+          ssh -t -o StrictHostKeyChecking=no -i private_key ${{ env.EC2_USER }}@${{ env.EC2_HOST}} "sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }} && sudo cp -rfp /home/${{ env.EC2_USER }}/index/dist/* /usr/share/nginx/html/demo/"
 
       - name: Ssh ec2 reestart tomcat
         uses: appleboy/ssh-action@master
