@@ -88,14 +88,14 @@ export default {
   },
   methods: {
     refresh: async function() {
-      const ret = await axios.get("http://localhost:8080/");
+      const ret = await axios.get(process.env.VUE_APP_API_URL);
       this.currencies = ret.data.currencies;
       console.info(this.currencies);
       this.request.name = undefined;
       this.request.symbol = undefined;
     },
     addCurrency: async function() {
-      await axios.post("http://localhost:8080/", this.request);
+      await axios.post(process.env.VUE_APP_API_URL, this.request);
       await this.refresh();
       this.$message({
         showClose: true,
@@ -104,7 +104,7 @@ export default {
       });
     },
     deleteCurrency: async function(id) {
-      await axios.delete("http://localhost:8080/" + id);
+      await axios.delete(process.env.VUE_APP_API_URL + id);
       await this.refresh();
       this.$message({
         showClose: true,
