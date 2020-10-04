@@ -49,6 +49,7 @@ jobs:
           npm ci
       - name: build vue modules
         run: |
+         cd ./web
          npm run build
          ls -ltr dist
 
