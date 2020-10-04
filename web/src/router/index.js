@@ -22,7 +22,7 @@ const routes = [
   // ここを追加
   {
     path: "/currency",
-    name: "currency",
+    name: "Currency",
     component: () =>
       import(/* webpackChunkName: "currency" */ "../views/Currency.vue")
   }
