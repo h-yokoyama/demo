@@ -11,7 +11,7 @@ on:
     branches: [ master ]
 
 env:
-  ENVIRONMENT: prod
+  ENVIRONMENT: 'prod'
   EC2_USER: 'ec2-user'
   EC2_HOST: http://ec2-3-115-214-155.ap-northeast-1.compute.amazonaws.com/
   SRC_PATH: 'target/*.war'
@@ -57,7 +57,7 @@ jobs:
           echo "===== scp war ====="
           scp -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war
 
-      - name: Ssh ec2 reestart tomcat
+      - name: Ssh ec2 restart tomcat
         uses: appleboy/ssh-action@master
         with:
           key: ${{ secrets.AWS_APPSRV1_PRIVATE_KEY }}
