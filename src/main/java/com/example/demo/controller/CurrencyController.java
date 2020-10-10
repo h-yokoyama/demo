@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +36,13 @@ public class CurrencyController {
     public ResponseEntity<HttpStatus> save(@RequestBody CurrencyAddRequest request) {
         currencyService.save(request.getName(), request.getSymbol());
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    @PutMapping("/")
+    public ResponseEntity<HttpStatus> update(@RequestBody CurrencyUpdateRequest request) {
+        currencyService.update(request.getId(), request.getName(), request.getSymbol(), request.getAmount());
+    	System.out.println(request.getId());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @DeleteMapping("/{id}")

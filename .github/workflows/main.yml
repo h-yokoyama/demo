@@ -13,7 +13,7 @@ on:
 env:
   ENVIRONMENT: prod
   EC2_USER: 'ec2-user'
-  EC2_HOST: 3.115.214.155
+  EC2_HOST: http://ec2-3-115-214-155.ap-northeast-1.compute.amazonaws.com/
   SRC_PATH: 'target/*.war'
   DEST_DIR: '/usr/share/tomcat/webapps'
 
@@ -36,18 +36,6 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      
-      - name: setup Node 
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-          registry-url: 'https://registry.npmjs.org'
-      - name: install can-npm-publish and dependencies and build
-        run: |
-          cd ./web
-          npm install can-npm-publish
-          npm ci
-          npm run build:prod
 
       - name: Build with Maven
         run: mvn -B package -Dmaven.test.skip=true --file pom.xml
@@ -68,8 +56,6 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           echo "===== scp war ====="
           scp -o StrictHostKeyChecking=no -i private_key ${{ env.SRC_PATH }} ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war
-          echo "===== scp vue module ====="
-          scp -o StrictHostKeyChecking=no -i private_key -r ./web/dist/ ${{ env.EC2_USER }}@${{ env.EC2_HOST }}:/home/${{ env.EC2_USER }}/index
 
       - name: Ssh ec2 reestart tomcat
         uses: appleboy/ssh-action@master
@@ -80,8 +66,6 @@ jobs:
           script: |
             echo "===== deploy war ====="
             sudo mv /home/${{ env.EC2_USER }}/${{ env.APP_NAME }}.war ${{ env.DEST_DIR }}
-            echo "===== deploy vue module ====="
-            sudo cp -rf /home/${{ env.EC2_USER }}/index/dist/* /usr/share/nginx/html/demo/
             echo "===== application (re)start ====="
             if sudo systemctl status tomcat 2>&1 | grep "Active: active (running)" ; then
               echo "${{ env.APP_NAME }} app restart!!"

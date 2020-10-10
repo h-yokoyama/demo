@@ -36,4 +36,13 @@ public class Currency {
         currency.amount = BigDecimal.ZERO;
         return currency;
     }
+    
+    public static Currency newCurrency(Long id, String name, String symbol, BigDecimal amount) {
+        Currency currency = new Currency();
+        currency.id = id;
+        currency.name = name;
+        currency.symbol = symbol;
+        currency.amount = amount;
+        return currency;
+    }
 }
