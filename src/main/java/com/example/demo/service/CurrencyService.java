@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.Currency;
 import com.example.demo.domain.CurrencyRepository;
+import com.example.demo.domain.entity.Currency;
 
 import lombok.RequiredArgsConstructor;
 

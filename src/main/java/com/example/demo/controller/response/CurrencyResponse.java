@@ -1,8 +1,8 @@
-package com.example.demo.controller;
+package com.example.demo.controller.response;
 
 import java.util.List;
 
-import com.example.demo.domain.Currency;
+import com.example.demo.domain.entity.Currency;
 
 import lombok.Builder;
 import lombok.Getter;
