@@ -10,6 +10,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MaterialResponse {
-	
+	private long totalElements;
+	private int totalPages;
+	private int page;
 	private List<Material> materials;
 }

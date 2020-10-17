@@ -2,8 +2,11 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.MaterialPagingRepository;
 import com.example.demo.domain.MaterialRepository;
 import com.example.demo.domain.entity.Material;
 
@@ -14,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class MaterialService {
 
 	private final MaterialRepository materialRepository;
+	private final MaterialPagingRepository materialPagingRepository;
 
 	public List<Material> findAll() {
 		return materialRepository.findAll();
@@ -33,4 +37,8 @@ public class MaterialService {
 	public void delete(Long id) {
 		materialRepository.findById(id).ifPresent(currency -> materialRepository.delete(currency));
 	}
+	
+    public Page<Material> findAllPageable(int page, int size){
+    	return materialPagingRepository.findAll(PageRequest.of(page, size));
+    }
 }
