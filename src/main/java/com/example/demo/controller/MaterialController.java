@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.request.MaterialAddRequest;
+import com.example.demo.controller.request.MaterialPageRequest;
 import com.example.demo.controller.request.MaterialUpdateRequest;
-import com.example.demo.controller.request.PageRequest;
 import com.example.demo.controller.response.MaterialResponse;
 import com.example.demo.domain.entity.Material;
 import com.example.demo.service.MaterialService;
@@ -41,8 +41,8 @@ public class MaterialController {
 	}
 	
 	@PostMapping(URL_FIND_ALL_PAGEABLE)
-	public ResponseEntity<MaterialResponse> findAllPageable(@RequestBody PageRequest request) {
-		Page<Material> materials = materialService.findAllPageable(request.getPage(), request.getSize());
+	public ResponseEntity<MaterialResponse> findAllPageable(@RequestBody MaterialPageRequest request) {	
+		Page<Material> materials = materialService.findAllPageable(request);
 		MaterialResponse materialResponse = MaterialResponse.builder().
 				materials(materials.getContent()).
 				totalElements(materials.getTotalElements()).
